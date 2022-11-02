@@ -1,0 +1,25 @@
+[workspace]
+
+resolver = "2"
+members = [
+    "contracts/*", 
+    "web/container",
+    "locutus/crates/*"
+]
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+lto = true
+opt-level = 's'
+debug = false
+codegen-units = 1
+panic = 'abort'
+strip = true
+
+[workspace.dependencies]
+locutus-stdlib = {path = "locutus/crates/locutus-stdlib"}
+
+#[target.wasm32-unknown-unknown]
+# rustflags = ["-C", "link-arg=--import-memory"]

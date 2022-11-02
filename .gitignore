@@ -1,0 +1,15 @@
+# Ignore developer files
+.vscode
+
+# Ignore build artifacts
+*.wasm
+**/node_modules/*
+**/dist/**/*.js*
+**/target/*
+**/build/*
+**/release/*
+**/wasm32-unknown-unknown/*
+docs
+
+**/web/jest.config.js
+**/web/src/**/*.js

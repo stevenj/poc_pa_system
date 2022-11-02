@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@msgpack/msgpack": "^2.8.0"
+  },
+  "dependencies": {
+    "bs58": "^5.0.0"
+  }
+}
