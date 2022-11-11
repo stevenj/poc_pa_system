@@ -1,7 +1,7 @@
 use ed25519_dalek::Verifier;
-use locutus_stdlib::{
+use locutus_stdlib::prelude::{
     blake2::{Blake2b512, Digest},
-    prelude::*,
+    *,
 };
 use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
@@ -105,6 +105,7 @@ impl ContractInterface for PostsFeed {
         state: State<'static>,
         _related: RelatedContracts,
     ) -> Result<ValidateResult, ContractError> {
+        print!("test1");
         PostsFeed::try_from(state).map(|_| ValidateResult::Valid)
     }
 

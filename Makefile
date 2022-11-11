@@ -8,27 +8,27 @@ POSTS_DIR =$(shell pwd)/contracts/posts
 LOCUTUS_DIR=$(shell cd locutus && pwd)
 
 build-tool:
+	rm -rf /tmp/locutus
 	cd $(LOCUTUS_DIR)
 	cd crates/locutus-node
 	cargo install --path .
+	cargo build
 
 webapp:
 	cd $(WEB_DIR)
 
 	CARGO_TARGET_DIR="${CARGO_TARGET_DIR}" ldt build
-#	#mv ./build/locutus/freenet_microblogging_web.wasm ../../../crates/locutus-node/examples/
-#	#mv ./build/locutus/contract-state ../../../crates/locutus-node/examples/freenet_microblogging_web
+	ldt publish --code build/locutus/poc_proposal_assessment.wasm --state build/locutus/contract-state
+	../locutus/target/debug/ldt publish --code build/locutus/poc_proposal_assessment.wasm --state build/locutus/contract-state
 
 posts:
 	cd $(POSTS_DIR)
 
 	CARGO_TARGET_DIR="${CARGO_TARGET_DIR}" ldt build
-#	mv ./build/locutus/freenet_microblogging_posts.wasm ../../../../crates/locutus-node/examples/
-#	mv ./build/locutus/contract-state ../../../../crates/locutus-node/examples/freenet_microblogging_posts
+	ldt publish --code build/locutus/poc_proposal_assessment_posts.wasm --state build/locutus/contract-state
+	../../locutus/target/debug/ldt publish --code build/locutus/poc_proposal_assessment_posts.wasm --state build/locutus/contract-state
 
-build: build-tool webapp posts
+build: build-tool posts webapp
 
-run:
-	cd $(LOCUTUS_DIR)
-	cd crates/locutus-node/examples
-	cargo run --example contract_browsing 
+run: 
+	locutus-node local 

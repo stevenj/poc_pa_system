@@ -44,3 +44,23 @@ git submodule update --init
 1. Build the latest `ldt` tool:
    * `make build-tool`
 2.
+
+```sh
+$ cd locutus/docker
+$ docker compose build
+...
+$ cd ../..
+
+
+$ CONTRACT_SRC_DIR=./contracts/posts/ ./locutus/docker/ldt.sh build
+$ ./locutus/docker/ldt.sh publish --code contracts/posts/build/locutus/poc_proposal_assessment_posts.wasm --state contracts/posts/build/locutus/contract-state
+PROJECT_SRC_DIR=/home/<something>/poc_pa_system <- Root of the Project being build
+CONTRACT_SRC_DIR=/home/<something>/poc_pa_system  <- Relative DIR under PROJECT_SRC_DIR to the Contract to build
+Putting contract FwiG1DsyEHbvtsQaE6qrT5jbSD8vhwaQqSWCSchdWha2
+$ CONTRACT_SRC_DIR=./web ./locutus/docker/ldt.sh build
+
+$ cd locutus/docker
+$ docker compose up
+```
+
+* Browse to: <http://localhost:50509/contract/web/HiUHuHQpVxrnXBA762spQoBi8cQjrZF7sK1DPTNvUucw/>
