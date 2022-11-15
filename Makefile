@@ -7,28 +7,33 @@ WEB_DIR =$(shell pwd)/web
 POSTS_DIR =$(shell pwd)/contracts/posts
 LOCUTUS_DIR=$(shell cd locutus && pwd)
 
-build-tool:
+run-prep:
 	rm -rf /tmp/locutus
-	cd $(LOCUTUS_DIR)
-	cd crates/locutus-node
-	cargo install --path .
+	
+build-p2p:
+	cd $(LOCUTUS_DIR)/crates/locutus-core/examples
 	cargo build
 
-webapp:
-	cd $(WEB_DIR)
+build-tool:
+	cd $(LOCUTUS_DIR)/crates/locutus-node
+	cargo build
 
+webapp-archive:
+	
+
+webapp-contract:
+	cd $(WEB_DIR)
 	CARGO_TARGET_DIR="${CARGO_TARGET_DIR}" ldt build
-	ldt publish --code build/locutus/poc_proposal_assessment.wasm --state build/locutus/contract-state
-	../locutus/target/debug/ldt publish --code build/locutus/poc_proposal_assessment.wasm --state build/locutus/contract-state
 
 posts:
 	cd $(POSTS_DIR)
-
 	CARGO_TARGET_DIR="${CARGO_TARGET_DIR}" ldt build
-	ldt publish --code build/locutus/poc_proposal_assessment_posts.wasm --state build/locutus/contract-state
-	../../locutus/target/debug/ldt publish --code build/locutus/poc_proposal_assessment_posts.wasm --state build/locutus/contract-state
 
 build: build-tool posts webapp
 
-run: 
+run: run-prep build
+
+	locutus/target/debug/ldt publish --code build/locutus/poc_proposal_assessment.wasm --state build/locutus/contract-state
+	locutus/target/debug/ldt publish --code build/locutus/poc_proposal_assessment_posts.wasm --state build/locutus/contract-state
+
 	locutus-node local 
