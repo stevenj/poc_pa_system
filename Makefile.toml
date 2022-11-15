@@ -1,0 +1,47 @@
+# Build scripts for Locutus and POC Contracts.
+# This file is built with `cargo make` see: 
+#  <https://github.com/sagiegurari/cargo-make>
+[config]
+
+[env]
+CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
+
+[tasks.install-nodejs-msgpack]
+script = '''
+echo Installing NodeJS Msgpack Library
+npm install @msgpack/msgpack
+'''
+
+[tasks.install-nodejs-bs58]
+script = '''
+echo Installing NodeJS bs58 Library
+npm install bs58
+'''
+
+[tasks.install-prereqs]
+workspace = false
+dependencies = [
+    "install-nodejs-msgpack",
+    "install-nodejs-bs58"
+]
+
+[tasks.build-locutus-node]
+workspace = false
+script = '''
+cd locutus/crates/locutus-node
+cargo build
+'''
+
+[tasks.build-locutus-p2p]
+workspace = false
+script = '''
+cd locutus/crates/locutus-core
+cargo build --example p2p_network
+'''
+
+[tasks.build-locutus]
+workspace = false
+dependencies = [
+    "build-locutus-node",
+    "build-locutus-p2p"
+]

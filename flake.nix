@@ -8,11 +8,6 @@
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  rust-bin.stable.latest.default.override {
-    extensions = [ "rust-src" ];
-    targets = [ "wasm32-unknown-unknown",
-                "wasm32-wasi" ];
-  }  
 
   outputs = { self, nixpkgs, flake-utils, rust-overlay }:
     flake-utils.lib.eachDefaultSystem
@@ -26,9 +21,19 @@
         {
           devShells.default = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
-              rust-bin.stable.latest.default 
+              (rust-bin.stable.latest.default.override {
+                  targets = [ 
+                    "wasm32-unknown-unknown"
+                    "wasm32-wasi" 
+                  ];
+              })
+              wasm-bindgen-cli
               llvmPackages_14.llvm
-              llvmPackages_14.libclang
+              nodejs
+              nodePackages.webpack
+              nodePackages.webpack-cli
+              nodePackages.typescript
+
             ];
           };
         }

@@ -2,6 +2,18 @@
 
 ## Prerequisites
 
+### Development Environment (NIX Shell)
+
+This is the **preferred** development environment.
+
+1. Install NIX : <https://nixos.org/download.html>
+2. Start a nix development environment (From the repo Root):
+   `nix develop`
+
+### Development Environment (Manual)
+
+~~ ***NOT RECOMMENDED*** ~~
+
 1. Install LLVM
 2. Install NPM
 3. Install the typescript package:
@@ -20,6 +32,13 @@
 5. Install msgpack & bs58 libraries:
    * `npm install @msgpack/msgpack`
    * `npm install bs58`
+
+### Install Extra Packages/Tools
+
+This only needs to be done once when the development environment is created.
+
+1. `cargo install cargo-make` : see <https://github.com/sagiegurari/cargo-make>
+2. `cargo make install-prereqs`
 
 ## Installing Source
 
@@ -40,6 +59,12 @@ git submodule update --init
 ```
 
 ## Building
+
+Make sure you are in a Nix dev shell: `nix develop`
+
+1. Build the Locutus Tools: `cargo make build-locutus`
+
+## Ignore this stuff ---
 
 1. Build the latest `ldt` tool:
    * `make build-tool`
