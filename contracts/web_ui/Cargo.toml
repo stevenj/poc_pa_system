@@ -1,0 +1,13 @@
+[package]
+name = "web_ui_container"
+version = "0.0.0"
+edition = "2021"
+rust-version = "1.64.0"
+resolver = "2"
+publish = false
+
+[dependencies]
+locutus-stdlib = { workspace = true }
+
+[lib]
+crate-type = ["cdylib"]
