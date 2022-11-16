@@ -21,6 +21,7 @@
         {
           devShells.default = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
+              pkg-config
               (rust-bin.stable.latest.default.override {
                   targets = [ 
                     "wasm32-unknown-unknown"
@@ -29,11 +30,13 @@
               })
               wasm-bindgen-cli
               llvmPackages_14.llvm
+              llvmPackages_14.libclang
               nodejs
               nodePackages.webpack
               nodePackages.webpack-cli
               nodePackages.typescript
-
+              libffi
+              libxml2
             ];
           };
         }

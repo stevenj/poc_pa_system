@@ -2,22 +2,36 @@
 # This file is built with `cargo make` see: 
 #  <https://github.com/sagiegurari/cargo-make>
 [config]
+min_version = "0.36.3"
 
 [env]
 CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
+CARGO_TARGET_DIR = "${CARGO_MAKE_CRATE_TARGET_DIRECTORY}"
+CARGO_MAKE_WORKSPACE_SKIP_MEMBERS = "locutus/*"
 
+[env.development]
+LOCUTUS_TOOLS_DIR = "${CARGO_TARGET_DIR}/debug"
+
+[env.production]
+LOCUTUS_TOOLS_DIR = "${CARGO_TARGET_DIR}/prod"
+
+# Install the msgpack NodeJS Library Prerequisite
 [tasks.install-nodejs-msgpack]
+script_runner = "@shell"
 script = '''
 echo Installing NodeJS Msgpack Library
 npm install @msgpack/msgpack
 '''
 
+# Install the b258 NodeJS Library Prerequisite
 [tasks.install-nodejs-bs58]
+script_runner = "@shell"
 script = '''
 echo Installing NodeJS bs58 Library
 npm install bs58
 '''
 
+# This task installs all pre-requisites, and must be called manually, and usually once.
 [tasks.install-prereqs]
 workspace = false
 dependencies = [
@@ -25,23 +39,41 @@ dependencies = [
     "install-nodejs-bs58"
 ]
 
+# Builds the main local development node.
 [tasks.build-locutus-node]
 workspace = false
+script_runner = "@shell"
 script = '''
-cd locutus/crates/locutus-node
+cd "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/locutus/crates/locutus-node"
 cargo build
 '''
 
+# Builds an example of Locutus with Peer to Peer networking.
 [tasks.build-locutus-p2p]
 workspace = false
+script_runner = "@shell"
 script = '''
-cd locutus/crates/locutus-core
+cd "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/locutus/crates/locutus-core"
 cargo build --example p2p_network
 '''
 
+# Builds all the Locutus tools we are using.
 [tasks.build-locutus]
 workspace = false
 dependencies = [
     "build-locutus-node",
     "build-locutus-p2p"
 ]
+
+# This will build ALL Contracts in the workspace.
+# IF there are members of the Rust Workspace which are NOT contracts
+# they must be specifically disabled in the [env] section above.
+[tasks.build-contracts]
+category = "Build"
+dependencies = [
+    "build-locutus"
+]
+script_runner = "@shell"
+script = '''
+${LOCUTUS_TOOLS_DIR}/ldt build
+'''
